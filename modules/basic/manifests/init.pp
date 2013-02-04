@@ -36,10 +36,37 @@ $file = '/etc/etckeeper/etckeeper.conf'
 
 	exec { "etckeeper commit -am 'Initial commit'": 
            require => Package['etckeeper'],
-		 }
-	
+		 }	
 	}
 	
+class tiger::install {
+	package { 'tiger':
+		ensure => present,
+			}
+					 }
+
+class psad::install {
+	    package { 'psad':
+		ensure => present,
+	            }
+					}
+
+class nmap::install {
+package { 'nmap':
+		ensure => present,
+        }
+					}
+class logwatch::install {
+
+package { 'logwatch':
+		ensure => present,
+        }
+						}
+		
 class basic {
              include etckeeper::install
-            }
+             include tiger::install
+			 include psad::install
+             include nmap::install
+             include logwatch::install 			 
+			}
