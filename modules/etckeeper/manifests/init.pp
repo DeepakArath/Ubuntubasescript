@@ -14,8 +14,7 @@ $file = '/etc/etckeeper/etckeeper.conf'
 
 	exec { "/usr/bin/etckeeper uninit -f":
 		require => Package['etckeeper'],
-		 }
-		  
+		 }		 
 		
     exec { "/bin/sed -i -e'/${line2}/s/#\+//' '${file}'" :
         onlyif => "/bin/grep '${line2}' '${file}' | /bin/grep '^#' | /usr/bin/wc -l"
@@ -30,10 +29,6 @@ $file = '/etc/etckeeper/etckeeper.conf'
     exec { "/bin/sed -i -e'/${line4}/s/\(.\+\)$/#\1/' '${file}'" :
         onlyif => "/usr/bin/test `/bin/grep '${line4}' '${file}' | /bin/grep -v '^#' | /usr/bin/wc -l` -ne 0"
     }
-
-
-
-
  
 	exec { "etckeeper init": 
            require => Package['etckeeper'],
