@@ -7,7 +7,7 @@ Exec {
 
 
 node default {
-include etckeeper
+include basic
 #include apache
 #include php
 #    include app

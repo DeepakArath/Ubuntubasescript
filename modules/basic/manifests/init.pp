@@ -10,7 +10,7 @@ $file = '/etc/etckeeper/etckeeper.conf'
         package {"etckeeper":
         name => "etckeeper",
 		ensure => present,
-		    }
+		        }
 
 	exec { "/usr/bin/etckeeper uninit -f":
 		require => Package['etckeeper'],
@@ -40,6 +40,6 @@ $file = '/etc/etckeeper/etckeeper.conf'
 	
 	}
 	
-class etckeeper {
+class basic {
              include etckeeper::install
-                }
+            }
