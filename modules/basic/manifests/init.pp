@@ -95,18 +95,90 @@ class logwatch::install {
 						}
 						
 class fail2ban::install {
-		
-		package { 'fail2ban':
-		ensure => present,
-				}						
-						}
 
+package { 'fail2ban':
+           ensure => present,
+        }
+
+service { "fail2ban":
+            ensure    => "running",
+            enable    => "true",
+            hasrestart => true,
+            hasstatus => true,
+            require => File["fail2ban"],
+        }
+file    {  "fail2ban":
+             path  => "/etc/fail2ban/jail.local",
+             source => "puppet:///modules/basic/jail.conf_sample",
+             mode => 644,
+             owner   => "root",
+             group   => "root",
+             ensure    => present,
+             require => Package["fail2ban"],
+             notify  => Service["fail2ban"],
+        }
+
+                        }
+						
+class mail::install {
+
+package { 'mutt':
+           ensure => present,
+        }
+file {  "mail":
+             path  => "/etc/init.d/system-startup-shutdown-notification.sh",
+             source => "puppet:///modules/basic/system-startup-shutdown-notification.sh",
+             mode => 744,
+             owner   => "root",
+             group   => "root",
+             ensure    => present,
+             require => Package["mutt"],
+     }
+
+exec { "update-rc.d system-startup-shutdown-notification.sh start 98 2 3 4 5 . stop 02 0 1 6 ." :
+           require => File['mail'],
+     }
+
+					}						
+
+
+class ssh::install {
+$ans =  'no'
+$strngs = 'PermitRootLogin'
+$file2 = '/etc/ssh/sshd_config'
+
+package { 'ssh':
+           ensure => present,
+        }
+
+service { "ssh":
+            ensure    => "running",
+            enable    => "true",
+            require   => Exec["2"],
+            hasrestart => true,
+            hasstatus => true,
+        }
+
+file {  "ssh":
+             mode    => 644,
+             owner   => "root",
+             group   => "root",
+             ensure    => present,
+             require => Package["ssh"],
+             path    => "/etc/ssh/sshd_config",
+     }
+exec {"2":
+             command => "sed -i '/${strngs}/c\PermitRootLogin \t ${ans}' '${file2}'",
+             require   =>  File["ssh"],
+             notify   =>  Service["ssh"],
+     }
+				    }
+					
 class whoopsie::remove  { 
 package { 'whoopsie':
     ensure => purged,
 		}						
 						}		
-
 
 class basic {
              include etckeeper::install
@@ -116,6 +188,7 @@ class basic {
              include logwatch::install 			 
 			 include fail2ban::install
 			 include whoopsie::remove 
-			 
+			 include mail::install
+             include ssh::install
 			}
 
