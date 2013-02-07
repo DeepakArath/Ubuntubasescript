@@ -138,9 +138,7 @@ file {  "mail":
 exec { "update-rc.d system-startup-shutdown-notification.sh start 98 2 3 4 5 . stop 02 0 1 6 ." :
            require => File['mail'],
      }
-
 					}						
-
 
 class ssh::install {
 $ans =  'no'
@@ -167,6 +165,7 @@ file {  "ssh":
              require => Package["ssh"],
              path    => "/etc/ssh/sshd_config",
      }
+	 
 exec {"2":
              command => "sed -i '/${strngs}/c\PermitRootLogin \t ${ans}' '${file2}'",
              require   =>  File["ssh"],
