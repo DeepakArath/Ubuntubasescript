@@ -8,7 +8,6 @@ Exec {
 
 node default {
 include basic
-#include apache
-#include php
-#    include app
+include mysql
+#include zabbix
 }
