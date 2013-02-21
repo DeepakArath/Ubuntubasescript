@@ -25,7 +25,7 @@ exec { "cmd2" :
  
 class percona::install {
 
-$pass = ' '
+#$pass = ' '
 include preq::install
 
 exec {"1":
@@ -34,7 +34,7 @@ require => Class["preq::install"],
      }
 	 
 exec {"2":
-        command => "echo percona-server-server-5.5   percona-server-server/root_password password $pass | sudo debconf-set-selections",
+        command => "echo percona-server-server-5.5   percona-server-server/root_password password $password | sudo debconf-set-selections",
         require => Exec ["1"], 
 	 }
 
@@ -49,7 +49,7 @@ exec {"4":
 	 }
 					   }
 
-class mysql {
+class mysql ($password){
              include percona::install
 	        }
 

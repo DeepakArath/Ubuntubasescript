@@ -19,19 +19,23 @@ $file = '/etc/etckeeper/etckeeper.conf'
     exec { "/bin/sed -i -e'/${line2}/s/#\+//' '${file}'" :
         onlyif => "/bin/grep '${line2}' '${file}' | /bin/grep '^#' | /usr/bin/wc -l",
          require => Package['etckeeper'],
+         before => Exec['etckeeper init'],
 	 }
     exec { "/bin/sed -i -e'/${line1}/s/\(.\+\)$/#\1/' '${file}'" :
         onlyif => "/usr/bin/test `/bin/grep '${line1}' '${file}' | /bin/grep -v '^#' | /usr/bin/wc -l` -ne 0",
          require => Package['etckeeper'],
+	 before => Exec['etckeeper init'],
          }
 
     exec { "/bin/sed -i -e'/${line3}/s/\(.\+\)$/#\1/' '${file}'" :
         onlyif => "/usr/bin/test `/bin/grep '${line3}' '${file}' | /bin/grep -v '^#' | /usr/bin/wc -l` -ne 0",
          require => Package['etckeeper'],
+	 before => Exec['etckeeper init'],
          }
     exec { "/bin/sed -i -e'/${line4}/s/\(.\+\)$/#\1/' '${file}'" :
         onlyif => "/usr/bin/test `/bin/grep '${line4}' '${file}' | /bin/grep -v '^#' | /usr/bin/wc -l` -ne 0",
          require => Package['etckeeper'],
+ 	 before => Exec['etckeeper init'],
          }
  
 	exec { "etckeeper init": 
@@ -51,21 +55,13 @@ class tiger::install {
 
 class psad::install {
 
-$addr =  'deepak@citrusinformatics.com;'
+#$addr =  'deepak@citrusinformatics.com;'
 $strng = 'EMAIL_ADDRESSES'
 $cfile = '/etc/psad/psad.conf'
 
     package { 'psad':
                 ensure => present,
             }
-    service { "psad":
-            ensure    => "running",
-            enable    => "true",
-            require   => Package["psad"],
-        hasrestart => true,
-        hasstatus => true,
-        subscribe => File["psad.conf"],
-			}
 
     file    {  "psad.conf":
 
@@ -77,10 +73,20 @@ $cfile = '/etc/psad/psad.conf'
              path    => "/etc/psad/psad.conf",
             }
 
-    exec    {"sed -i '/${strng}/c\EMAIL_ADDRESSES \t ${addr}' '${cfile}'" :
+    exec    {"sed -i '/${strng}/c\EMAIL_ADDRESSES \t ${emailaddr}' '${cfile}'" :
              require   =>  Package["psad"],
-              notify   =>  Service["psad"],
-            }
+             notify   =>  Service["psad"],
+             before => Service["psad"], 
+	    }
+
+service { "psad":
+            ensure    => "running",
+            enable    => "true",
+            require   => Package["psad"],
+        hasrestart => true,
+        hasstatus => true,
+        subscribe => File["psad.conf"],
+                        }
                      }   
 class nmap::install {
 		package { 'nmap':
@@ -152,7 +158,7 @@ package { 'ssh':
 service { "ssh":
             ensure    => "running",
             enable    => "true",
-            require   => Exec["2"],
+            require   => Exec["change"],
             hasrestart => true,
             hasstatus => true,
         }
@@ -166,7 +172,7 @@ file {  "ssh":
              path    => "/etc/ssh/sshd_config",
      }
 	 
-exec {"2":
+exec {"change":
              command => "sed -i '/${strngs}/c\PermitRootLogin \t ${ans}' '${file2}'",
              require   =>  File["ssh"],
              notify   =>  Service["ssh"],
@@ -179,7 +185,7 @@ package { 'whoopsie':
 		}						
 						}		
 
-class basic {
+class basic ($emailaddr){
              include etckeeper::install
              include tiger::install
 			 include psad::install

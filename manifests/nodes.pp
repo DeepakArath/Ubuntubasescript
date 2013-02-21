@@ -1,3 +1,7 @@
+#$ipaddr = "Enter server IP Address here"
+
+
+
 Exec {
     path => ["/bin", "/sbin", "/usr/bin", "/usr/sbin"],
 }
@@ -7,7 +11,17 @@ Exec {
 
 
 node default {
-include basic
-include mysql
-#include zabbix
+$ipaddress = 'Add Server IP Address Here'
+$psademail = 'Add Email address for PSAD alert'
+$perconapasswd = ' Add Percona Mysql password here' 
+class { 'basic': 
+emailaddr => $psademail,
+}
+class { 'mysql': 
+password => $perconapasswd,
+}
+class { 'nfs':  
+ipaddr => $ipaddress,
+} 
+include nfscli
 }
