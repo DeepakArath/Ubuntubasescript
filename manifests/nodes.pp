@@ -11,9 +11,9 @@ Exec {
 
 
 node default {
-$ipaddress = 'Add Server IP Address Here'
-$psademail = 'Add Email address for PSAD alert'
-$perconapasswd = ' Add Percona Mysql password here' 
+$ipaddress = '192.168.1.102'
+$psademail = 'deepak@citrusinformatics.com;'
+$perconapasswd = '123456' 
 class { 'basic': 
 emailaddr => $psademail,
 }
@@ -23,5 +23,5 @@ password => $perconapasswd,
 class { 'nfs':  
 ipaddr => $ipaddress,
 } 
-include nfscli
+#include nfscli
 }

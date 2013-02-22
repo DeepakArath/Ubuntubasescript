@@ -73,19 +73,19 @@ $cfile = '/etc/psad/psad.conf'
              path    => "/etc/psad/psad.conf",
             }
 
-    exec    {"sed -i '/${strng}/c\EMAIL_ADDRESSES \t ${emailaddr}' '${cfile}'" :
+    exec    { "5" :
+             command => "sed -i '/${strng}/c\EMAIL_ADDRESSES \t ${emailaddr}' '${cfile}'",
              require   =>  Package["psad"],
              notify   =>  Service["psad"],
-             before => Service["psad"], 
 	    }
 
 service { "psad":
-            ensure    => "running",
+#            ensure    => "running",
             enable    => "true",
-            require   => Package["psad"],
+            require   => Exec["5"],
         hasrestart => true,
         hasstatus => true,
-        subscribe => File["psad.conf"],
+#        subscribe => File["psad.conf"],
                         }
                      }   
 class nmap::install {

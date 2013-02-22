@@ -39,7 +39,7 @@ exec {"2":
 	 }
 
 exec {"3":
-        command => "echo percona-server-server-5.5   percona-server-server/root_password_again password $pass | sudo debconf-set-selections",
+        command => "echo percona-server-server-5.5   percona-server-server/root_password_again password $password | sudo debconf-set-selections",
         require => Exec ["2"],
      }
 
