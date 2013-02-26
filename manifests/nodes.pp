@@ -11,17 +11,47 @@ Exec {
 
 
 node default {
-$ipaddress = '192.168.1.102'
-$psademail = 'deepak@citrusinformatics.com;'
-$perconapasswd = '123456' 
+
+## The following variables are used in configuring S3CMD ##########
+$accessskey = 'Add Amazone access key here'
+$secretkey = 'Add secret key here'
+$encryptionpass = 'Encryption password here'
+$pathtogpg = ' Add gpg path, Default is /usr/bin/gpg'
+$httpsuse = 'Set True or False'
+$proxyhttps = 'Add Proxy host name if any, otherwise leave it blank'
+$proxyport = 'Add proxy port if any otherwise blank'
+####################################################################
+
+
+$ipaddress = 'Add Server IP address here. this will be passed to NFS module'
+
+$psademail = 'Add Email alert address for PSAD here'
+
+$perconapasswd = 'Add percona server password here' 
+
+
 class { 'basic': 
-emailaddr => $psademail,
-}
+	emailaddr => $psademail,
+      }
+
 class { 'mysql': 
-password => $perconapasswd,
-}
+	password => $perconapasswd,
+      }
+
 class { 'nfs':  
-ipaddr => $ipaddress,
-} 
-#include nfscli
+	ipaddr => $ipaddress,
+      } 
+
+include nfscli
+
+class { 's3cmd':
+
+	aceskey => $accessskey,
+	secrtkey => $secretkey,
+	encryptpass => $encryptionpass,
+	pathgpg => $pathtogpg,
+	httpuse => $httpsuse,
+	proxyhttp => $proxyhttps,
+	proxyprt => $proxyport,
+      }
 }

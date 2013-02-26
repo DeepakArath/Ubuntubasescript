@@ -30,7 +30,7 @@ include preq::install
 
 exec {"1":
 command => "/usr/bin/apt-get -y update",
-require => Class["preq::install"],
+#require => Class["preq::install"],
      }
 	 
 exec {"2":
