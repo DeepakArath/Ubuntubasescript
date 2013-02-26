@@ -13,13 +13,11 @@ Exec {
 node default {
 
 ## The following variables are used in configuring S3CMD ##########
+
 $accessskey = 'Add Amazone access key here'
 $secretkey = 'Add secret key here'
 $encryptionpass = 'Encryption password here'
-$pathtogpg = ' Add gpg path, Default is /usr/bin/gpg'
-$httpsuse = 'Set True or False'
-$proxyhttps = 'Add Proxy host name if any, otherwise leave it blank'
-$proxyport = 'Add proxy port if any otherwise blank'
+
 ####################################################################
 
 
@@ -49,9 +47,6 @@ class { 's3cmd':
 	aceskey => $accessskey,
 	secrtkey => $secretkey,
 	encryptpass => $encryptionpass,
-	pathgpg => $pathtogpg,
-	httpuse => $httpsuse,
-	proxyhttp => $proxyhttps,
-	proxyprt => $proxyport,
+	
       }
 }

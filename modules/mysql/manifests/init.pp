@@ -48,6 +48,7 @@ exec {"3":
 exec {"4":
         command => "/usr/bin/apt-get install -y percona-server-server-5.5 percona-server-client-5.5",
         require => Exec ["3"],
+		timeout => '0',
 	 }
 					   }
 

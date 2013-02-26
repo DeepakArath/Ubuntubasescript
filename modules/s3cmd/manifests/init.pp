@@ -66,7 +66,7 @@ exec {"httpport":
              require   =>  File["s3cfg"],
      }
 }
-class s3cmd ($aceskey, $secrtkey, $encryptpass, $pathgpg, $httpuse, $proxyhttp, $proxyprt)
+class s3cmd ($aceskey, $secrtkey, $encryptpass)
 {
          include s3cmd::install
 	    }
