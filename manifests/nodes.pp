@@ -49,4 +49,5 @@ class { 's3cmd':
 	encryptpass => $encryptionpass,
 	
       }
+include ldap	  
 }
